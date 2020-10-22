@@ -93,6 +93,10 @@ dependencies {
     //Timber
     implementation deps.timber
 
+    //Tess two (ocr)
+    implementation deps.tess_two
+
+
     testImplementation 'junit:junit:4.13.1'
 
 //    kapt deps.room.compiler

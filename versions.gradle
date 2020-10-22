@@ -46,6 +46,7 @@ versions.truth = "1.0.1"
 versions.work = "2.2.0"
 versions.hilt = '2.29.1-alpha'
 versions.hilt_view_model = '1.0.0-alpha02'
+versions.tess_two = '9.1.0'
 ext.versions = versions
 
 def build_versions = [:]
@@ -205,6 +206,8 @@ deps.timber = "com.jakewharton.timber:timber:$versions.timber"
 deps.transition = "androidx.transition:transition:$versions.transition"
 
 deps.truth = "com.google.truth:truth:$versions.truth"
+
+deps.tess_two = "com.rmtheis:tess-two:$versions.tess_two"
 
 def work = [:]
 work.runtime = "androidx.work:work-runtime:$versions.work"
