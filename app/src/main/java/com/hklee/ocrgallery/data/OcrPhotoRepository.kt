@@ -20,6 +20,14 @@ class OcrPhotoRepository @Inject constructor(
         dao.search(word)
     }.flow
 
+    suspend fun loadAll(): Array<OcrPhoto> {
+        return dao.loadAll()
+    }
+
+    suspend fun isUriExist(uri: String): Boolean {
+        return dao.isUriExist(uri)
+    }
+
     suspend fun insert(ocrPhoto: OcrPhoto) {
         dao.insert(ocrPhoto)
     }

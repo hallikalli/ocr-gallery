@@ -5,19 +5,17 @@ import androidx.lifecycle.lifecycleScope
 import com.hklee.musicplayer.base.BaseFragment
 import com.hklee.ocrgallery.adapters.GalleryAdapter
 import com.hklee.ocrgallery.databinding.FragmentGalleryBinding
-import com.hklee.ocrgallery.viewmodels.GalleryViewModel
+import com.hklee.ocrgallery.viewmodels.TessViewModel
 import com.jakewharton.rxbinding4.widget.textChanges
-import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
 class GalleryFragment :
-    BaseFragment<FragmentGalleryBinding, GalleryViewModel>(R.layout.fragment_gallery) {
+    BaseFragment<FragmentGalleryBinding, TessViewModel>(R.layout.fragment_gallery) {
 
     private val adapter = GalleryAdapter()
     private var job: Job? = null
@@ -25,7 +23,7 @@ class GalleryFragment :
     //    private val viewModel: GalleryViewModel by viewModels()
     private val compositeDisposable = CompositeDisposable()
     private val SEARCH_REFRESH_MILLSEC = 300L
-    override val mainViewModel by activityViewModels<GalleryViewModel>()
+    override val mainViewModel by activityViewModels<TessViewModel>()
 
     override fun init() {
         binding.photoList.adapter = adapter

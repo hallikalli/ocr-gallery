@@ -1,21 +1,27 @@
 package com.hklee.ocrgallery
 
-import android.content.ContentResolver
-import android.database.Cursor
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Media.query
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import com.hklee.ocrgallery.data.OcrPhotoDao
+import com.hklee.ocrgallery.data.OcrPhotoDao_Impl
+import com.hklee.ocrgallery.data.OcrPhotoRepository
 import com.hklee.ocrgallery.utilites.TesseractOcr
-
+import com.hklee.ocrgallery.viewmodels.TessViewModel
+import junit.framework.TestCase.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
+import org.mockito.Mock
+import org.mockito.Mockito.mock
+import org.mockito.junit.MockitoJUnitRunner
 import timber.log.Timber
 import java.sql.Date
-import java.util.concurrent.TimeUnit
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -31,6 +37,16 @@ class ExampleInstrumentedTest {
         assertEquals("com.hklee.OcrGallery", appContext.packageName)
     }
 
+    lateinit var appContext: Context
+    lateinit var tesseract: TesseractOcr
+
+    @Before
+    fun initContxt() {
+        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        tesseract = TesseractOcr(appContext)
+    }
+
+
     @Test
     fun tesseract() {
         // Context of the app under test.
@@ -40,7 +56,8 @@ class ExampleInstrumentedTest {
 
     @Test
     fun accessMediaStore() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        var list = mutableListOf<Uri>()
+
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DISPLAY_NAME,
@@ -69,6 +86,8 @@ class ExampleInstrumentedTest {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     id.toString()
                 )
+                list.add(contentUri)
+
                 Timber.tag("accessMediaStore()").d(
                     "id: $id, display_name: $displayName, date_taken: " +
                             "$dateTaken, content_uri: $contentUri"

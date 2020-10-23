@@ -5,14 +5,18 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import java.util.concurrent.Flow
 
 @Dao
 interface OcrPhotoDao{
     @Query("SELECT * FROM OcrPhoto")
-    fun getAll(): PagingSource<Int, OcrPhoto>
+    fun loadAll(): Array<OcrPhoto>
 
-    @Query("SELECT * FROM OcrPhoto WHERE ocr LIKE :word")
+    @Query("SELECT * FROM OcrPhoto WHERE ocr LIKE '%'||:word||'%'")
     fun search(word:String): PagingSource<Int, OcrPhoto>
+
+    @Query("SELECT EXISTS(SELECT * FROM OcrPhoto WHERE uri = :uri)")
+    fun isUriExist(uri : String) : Boolean
 
     @Insert
     suspend fun insert(ocrPhoto: List<OcrPhoto>)
