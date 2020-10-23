@@ -6,6 +6,7 @@ import com.hklee.musicplayer.base.BaseFragment
 import com.hklee.ocrgallery.adapters.GalleryAdapter
 import com.hklee.ocrgallery.databinding.FragmentGalleryBinding
 import com.hklee.ocrgallery.viewmodels.TessViewModel
+import com.jakewharton.rxbinding4.widget.queryTextChanges
 import com.jakewharton.rxbinding4.widget.textChanges
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.Job
@@ -31,13 +32,12 @@ class GalleryFragment :
     }
 
     private fun initSearchObservable() {
-        //300밀리세즈에 한번씩 검색
-        val observable = binding.editTextTextPersonName2.textChanges()
-        var disposable = observable
+        var disposable = binding.editTextTextPersonName2.queryTextChanges()
             .debounce(SEARCH_REFRESH_MILLSEC, TimeUnit.MILLISECONDS)
+            .map(CharSequence::toString)
             .onErrorReturn { "" }
             .subscribe {
-                search(it.toString())
+                search(it)
             }
         compositeDisposable.add(disposable)
     }
@@ -50,10 +50,7 @@ class GalleryFragment :
     private fun search(word: String) {
         job?.cancel()
         job = lifecycleScope.launch {
-//            mainViewModel.searchPhoto(word)
-//            Timber.d("main view mode " + mainViewModel)
-//            mainViewModel.searchPhoto(word)
-             mainViewModel.searchPhoto(word).collectLatest {
+            mainViewModel.searchPhoto(word).collectLatest {
                 adapter.submitData(it)
             }
         }

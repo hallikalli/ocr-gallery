@@ -85,7 +85,7 @@ dependencies {
     //Reactive X
     implementation deps.rx_android
     implementation deps.rxjava3
-    implementation deps.rx_vinding
+    implementation deps.rx_binding
 
     //glide
     implementation deps.glide.runtime

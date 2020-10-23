@@ -201,7 +201,7 @@ deps.rx_android = "io.reactivex.rxjava3:rxandroid:$versions.rx_android"
 
 deps.rxjava3 = "io.reactivex.rxjava3:rxjava:$versions.rxjava3"
 
-deps.rx_vinding = "com.jakewharton.rxbinding4:rxbinding:$versions.rx_binding"
+deps.rx_binding = "com.jakewharton.rxbinding4:rxbinding:$versions.rx_binding"
 
 deps.timber = "com.jakewharton.timber:timber:$versions.timber"
 

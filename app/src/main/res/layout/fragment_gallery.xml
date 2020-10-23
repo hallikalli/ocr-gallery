@@ -23,12 +23,11 @@
             android:theme="?attr/actionBarTheme"
             app:layout_scrollFlags="scroll|enterAlways" />
 
-        <EditText
+        <SearchView
             android:id="@+id/editTextTextPersonName2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:layout_height="match_parent" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
