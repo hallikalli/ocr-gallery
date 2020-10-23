@@ -36,7 +36,7 @@ class TessViewModel @ViewModelInject constructor(
     private val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} DESC"
 
 
-    fun searchPhoto(word: String) =  photoRepository.search(word)
+    fun searchPhoto(word: String) = photoRepository.search(word)
 
 
     fun sync(context: Context) {
@@ -46,13 +46,16 @@ class TessViewModel @ViewModelInject constructor(
             for (uri in list) {
                 if (photoRepository.isUriExist(uri.toString()))
                     continue
-                val text = convertBitmap(context.contentResolver, Uri.parse(uri))?.let { tesseract.toOcrText(it) }
+                val text = convertBitmap(
+                    context.contentResolver,
+                    Uri.parse(uri)
+                )?.let { tesseract.toOcrText(it) }
                 var ocrPhoto = OcrPhoto(uri, text ?: "")
                 photoRepository.insert(ocrPhoto)
             }
             //스크린샷 삭제
             for (ocrPhoto in photoRepository.loadAll()) {
-                if (!list.contains(ocrPhoto.uri)){
+                if (!list.contains(ocrPhoto.uri)) {
                     photoRepository.remove(ocrPhoto)
                 }
             }

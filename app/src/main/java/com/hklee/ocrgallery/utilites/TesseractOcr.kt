@@ -24,7 +24,9 @@ class TesseractOcr(val context: Context) {
     // 문자 인식 및 결과 출력
     fun toOcrText(bitmap: Bitmap): String {
         tess.setImage(bitmap)
-        return tess.utF8Text
+        var result = tess.utF8Text.replace("\n", " ").replace("\t"," ");
+        Timber.tag("result ocr ").d(result)
+        return result
     }
 
     fun destroy() {
@@ -37,13 +39,13 @@ class TesseractOcr(val context: Context) {
         if(prepareDirectory())
             updateTrainedDataFile()
         else
-            Timber.e("Directory not created")
+            Timber.e("Directory($TESSERACT_PATH) not created ")
     }
 
     private fun prepareDirectory(): Boolean {
         val dir = File( TESSERACT_PATH+TRANINEDDATA_FOLDER)
         if(dir.exists()) return true
-        return dir.mkdir()
+        return dir.mkdirs()
     }
 
     private fun updateTrainedDataFile() {
