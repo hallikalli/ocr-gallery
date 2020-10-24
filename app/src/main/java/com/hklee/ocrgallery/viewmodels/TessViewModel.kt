@@ -8,12 +8,14 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import androidx.paging.PagingData
 import com.hklee.musicplayer.base.BaseViewModel
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.data.OcrPhotoRepository
 import com.hklee.ocrgallery.utilites.TesseractOcr
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.sql.Date
@@ -24,8 +26,10 @@ class TessViewModel @ViewModelInject constructor(
     private val tesseract: TesseractOcr
 ) : BaseViewModel() {
 
+    var searchFlow: Flow<PagingData<OcrPhoto>>? = null
     private val _syncProgress = MutableLiveData<Pair<Int, Int>>()
     val syncProgress: LiveData<Pair<Int, Int>> get() = _syncProgress
+    val currentPosition = MutableLiveData<Int>()
     private val projection = arrayOf(
         MediaStore.Images.Media._ID,
         MediaStore.Images.Media.DISPLAY_NAME,
@@ -36,7 +40,10 @@ class TessViewModel @ViewModelInject constructor(
     private val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} DESC"
 
 
-    fun searchPhoto(word: String) = photoRepository.search(word)
+    fun searchPhoto(word: String): Flow<PagingData<OcrPhoto>> {
+        searchFlow = photoRepository.search(word)
+        return photoRepository.search(word)
+    }
 
 
     fun sync(context: Context) {

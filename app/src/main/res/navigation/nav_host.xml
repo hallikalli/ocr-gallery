@@ -3,11 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_host"
-    app:startDestination="@id/blankFragment">
+    app:startDestination="@id/galleryFragment">
 
     <fragment
-        android:id="@+id/blankFragment"
+        android:id="@+id/galleryFragment"
         android:name="com.hklee.ocrgallery.GalleryFragment"
         android:label="fragment_blank"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_gallery" >
+        <action
+            android:id="@+id/to_PhotoSliderFragment"
+            app:destination="@id/photoSliderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoSliderFragment"
+        android:name="com.hklee.ocrgallery.ImagePagerFragment"
+        android:label="fragment_photo_slider"
+        tools:layout="@layout/fragment_pager" />
 </navigation>
