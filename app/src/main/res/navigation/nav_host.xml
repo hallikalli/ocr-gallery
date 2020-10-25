@@ -12,11 +12,23 @@
         tools:layout="@layout/fragment_gallery" >
         <action
             android:id="@+id/to_PhotoSliderFragment"
-            app:destination="@id/photoSliderFragment" />
+            app:destination="@id/photoSliderFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit">
+            <argument
+                android:name="selectedPosition"
+                app:argType="integer"
+                android:defaultValue="0" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/photoSliderFragment"
         android:name="com.hklee.ocrgallery.ImagePagerFragment"
         android:label="fragment_photo_slider"
-        tools:layout="@layout/fragment_pager" />
+        tools:layout="@layout/fragment_pager">
+        <argument
+            android:name="selectedPosition"
+            app:argType="integer"
+            android:defaultValue="0"/>
+    </fragment>
 </navigation>

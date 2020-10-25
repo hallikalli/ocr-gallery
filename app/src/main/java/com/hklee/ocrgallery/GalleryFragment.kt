@@ -1,8 +1,12 @@
 package com.hklee.ocrgallery
 
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hklee.musicplayer.base.BaseFragment
 import com.hklee.ocrgallery.adapters.GalleryAdapter
 import com.hklee.ocrgallery.adapters.ListItemClickListener
@@ -30,14 +34,13 @@ class GalleryFragment :
 
     override fun init() {
         binding.photoList.adapter = adapter
-        observeSearch()//끌때마다 이닛이 진행되네
-        observeScrollPosition()//끌때마다 이닛이 진행되네
+        observeSearch()
+        observeScrollPosition()
     }
 
     override fun onListItemClick(position: Int) {
-        Timber.tag("page select onListItemClick").d("${mainViewModel.currentPosition.value}")
-        mainViewModel.currentPosition.value = position
-        findNavController().navigate(GalleryFragmentDirections.toPhotoSliderFragment())
+        Timber.tag("page select onListItemClick").d("${position}")
+        findNavController().navigate(GalleryFragmentDirections.toPhotoSliderFragment(position))
     }
 
     override fun onDestroy() {
@@ -48,7 +51,7 @@ class GalleryFragment :
     private fun observeScrollPosition() {
         // 다른 Fragment에 있는 ViewPager에 맞춰 위치를 scroll
         mainViewModel.currentPosition.observe(viewLifecycleOwner, {
-            Timber.tag("page select scrollToPosition").d("${mainViewModel.currentPosition.value}")
+            Timber.tag("page select scrollToPosition").d("$it}")
             binding.photoList.scrollToPosition(it)
         })
     }
@@ -72,8 +75,6 @@ class GalleryFragment :
             }
         }
     }
-
-
 
 
 }

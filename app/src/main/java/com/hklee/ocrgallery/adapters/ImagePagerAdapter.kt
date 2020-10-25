@@ -1,19 +1,20 @@
 package com.hklee.ocrgallery.adapters
 
 import android.content.Context
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.hklee.ocrgallery.R
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.databinding.ListItemFullImageBinding
-import com.hklee.ocrgallery.databinding.ListItemPhotoBinding
 
 
 class ImagePagerAdapter :
