@@ -1,25 +1,15 @@
 package com.hklee.ocrgallery
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.hklee.ocrgallery.data.OcrPhotoDao
-import com.hklee.ocrgallery.data.OcrPhotoDao_Impl
-import com.hklee.ocrgallery.data.OcrPhotoRepository
-import com.hklee.ocrgallery.utilites.TesseractOcr
-import com.hklee.ocrgallery.viewmodels.TessViewModel
-import junit.framework.TestCase.assertTrue
+import com.hklee.ocrgallery.utils.TesseractOcr
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito.mock
-import org.mockito.junit.MockitoJUnitRunner
 import timber.log.Timber
 import java.sql.Date
 

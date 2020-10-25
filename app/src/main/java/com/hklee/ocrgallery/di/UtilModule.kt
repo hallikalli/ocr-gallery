@@ -2,7 +2,7 @@ package com.hklee.ocrgallery.di
 
 
 import android.content.Context
-import com.hklee.ocrgallery.utilites.TesseractOcr
+import com.hklee.ocrgallery.utils.TesseractOcr
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

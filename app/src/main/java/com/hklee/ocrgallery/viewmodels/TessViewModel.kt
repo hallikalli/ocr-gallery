@@ -12,7 +12,7 @@ import androidx.paging.PagingData
 import com.hklee.musicplayer.base.BaseViewModel
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.data.OcrPhotoRepository
-import com.hklee.ocrgallery.utilites.TesseractOcr
+import com.hklee.ocrgallery.utils.TesseractOcr
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

@@ -4,14 +4,12 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.hklee.ocrgallery.data.OcrPhotoDao
 import com.hklee.ocrgallery.data.OcrPhotoRepository
-import com.hklee.ocrgallery.utilites.TesseractOcr
-import com.hklee.ocrgallery.viewmodels.TessViewModel
+import com.hklee.ocrgallery.utils.TesseractOcr
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import timber.log.Timber
 
 @RunWith(MockitoJUnitRunner::class)
 class OcrTest {

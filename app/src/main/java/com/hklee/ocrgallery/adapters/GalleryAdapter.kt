@@ -2,12 +2,9 @@ package com.hklee.ocrgallery.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.hklee.ocrgallery.GalleryFragment
-import com.hklee.ocrgallery.GalleryFragmentDirections
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.databinding.ListItemPhotoBinding
 

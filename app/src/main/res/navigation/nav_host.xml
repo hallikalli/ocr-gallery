@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/galleryFragment"
-        android:name="com.hklee.ocrgallery.GalleryFragment"
+        android:name="com.hklee.ocrgallery.fagments.GalleryFragment"
         android:label="fragment_blank"
         tools:layout="@layout/fragment_gallery" >
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/photoSliderFragment"
-        android:name="com.hklee.ocrgallery.ImagePagerFragment"
+        android:name="com.hklee.ocrgallery.fagments.ImagePagerFragment"
         android:label="fragment_photo_slider"
         tools:layout="@layout/fragment_pager">
         <argument

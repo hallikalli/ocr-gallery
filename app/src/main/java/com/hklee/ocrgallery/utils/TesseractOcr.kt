@@ -1,4 +1,4 @@
-package com.hklee.ocrgallery.utilites
+package com.hklee.ocrgallery.utils
 
 import android.content.Context
 import android.graphics.Bitmap
