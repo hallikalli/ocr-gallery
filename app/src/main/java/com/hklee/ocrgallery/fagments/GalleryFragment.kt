@@ -4,7 +4,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hklee.musicplayer.base.BaseFragment
-import com.hklee.ocrgallery.GalleryFragmentDirections
 import com.hklee.ocrgallery.R
 import com.hklee.ocrgallery.adapters.GalleryAdapter
 import com.hklee.ocrgallery.adapters.ListItemClickListener
