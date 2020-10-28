@@ -1,13 +1,24 @@
 package com.hklee.ocrgallery.fagments
 
+import android.os.Build
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.app.SharedElementCallback
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.transition.TransitionInflater
 import com.hklee.musicplayer.base.BaseFragment
 import com.hklee.ocrgallery.R
 import com.hklee.ocrgallery.adapters.GalleryAdapter
-import com.hklee.ocrgallery.adapters.ListItemClickListener
+import com.hklee.ocrgallery.base.ListItemClickListener
 import com.hklee.ocrgallery.databinding.FragmentGalleryBinding
+import com.hklee.ocrgallery.extensions.waitForTransition
 import com.hklee.ocrgallery.viewmodels.TessViewModel
 import com.jakewharton.rxbinding4.widget.queryTextChanges
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -22,22 +33,38 @@ class GalleryFragment :
     BaseFragment<FragmentGalleryBinding, TessViewModel>(R.layout.fragment_gallery),
     ListItemClickListener {
 
-    private val adapter = GalleryAdapter(this)
     override val mainViewModel by activityViewModels<TessViewModel>()
-
+    private val adapter = GalleryAdapter(this)
     private var job: Job? = null
     private val compositeDisposable = CompositeDisposable()
     private val SEARCH_REFRESH_MILLSEC = 300L
 
-    override fun init() {
-        binding.photoList.adapter = adapter
-        observeSearch()
-        observeScrollPosition()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition =
+            TransitionInflater.from(context)
+                .inflateTransition(R.transition.shared_element_transition)
     }
 
-    override fun onListItemClick(position: Int) {
-        Timber.tag("page select onListItemClick").d("${position}")
-        findNavController().navigate(GalleryFragmentDirections.toPhotoSliderFragment(position))
+    override fun init() {
+        binding.recycler.adapter = adapter
+        observeSearch()
+        observeScrollPosition()
+        prepareTransitions()
+        waitForTransition(binding.recycler)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        prepareTransitions()
+        waitForTransition(binding.recycler)
+    }
+
+    override fun onListItemClick(position: Int, viewItem: View?) {
+        val action = GalleryFragmentDirections.toPhotoSliderFragment(selectedPosition = position)
+        var extra = FragmentNavigatorExtras(viewItem!! to viewItem.transitionName)
+        findNavController().navigate(action, extra)
     }
 
     override fun onDestroy() {
@@ -47,10 +74,10 @@ class GalleryFragment :
 
     private fun observeScrollPosition() {
         // 다른 Fragment에 있는 ViewPager에 맞춰 위치를 scroll
-        mainViewModel.currentPosition.observe(viewLifecycleOwner, {
-            Timber.tag("page select scrollToPosition").d("$it}")
-            binding.photoList.scrollToPosition(it)
-        })
+//        mainViewModel.currentPosition.observe(viewLifecycleOwner, {
+//            Timber.tag("page select scrollToPosition").d("$it}")
+//            binding.recycler.scrollToPosition(it)
+//        })
     }
 
     private fun observeSearch() {
@@ -73,5 +100,20 @@ class GalleryFragment :
         }
     }
 
+    private fun prepareTransitions() {
+        setExitSharedElementCallback(object : SharedElementCallback() {
+            override fun onMapSharedElements(
+                names: MutableList<String>,
+                sharedElements: MutableMap<String, View>
+            ) {
+                val position = mainViewModel.currentPosition.value ?: -1
+                val selectedViewHolder =
+                    binding.recycler.findViewHolderForAdapterPosition(position)
+                selectedViewHolder?.itemView?.findViewById<ImageView>(R.id.image)?.let {
+                    sharedElements[names[0]] = it
+                }
+            }
+        })
+    }
 
 }

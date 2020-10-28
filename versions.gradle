@@ -42,7 +42,7 @@ versions.rxjava2 = "2.1.3"
 versions.rxjava3 = "3.0.7"
 versions.rx_binding = "4.0.0"
 versions.timber = "4.7.1"
-versions.transition = "1.3.0"
+versions.transition = "1.3.1"
 versions.truth = "1.0.1"
 versions.work = "2.2.0"
 versions.hilt = '2.29.1-alpha'
@@ -51,8 +51,8 @@ versions.tess_two = '9.1.0'
 ext.versions = versions
 
 def build_versions = [:]
-build_versions.min_sdk = 26
-build_versions.compile_sdk = 30
+build_versions.min_sdk = 25
+build_versions.compile_sdk = 29
 build_versions.target_sdk = 29
 build_versions.build_tools = "29.0.3"
 ext.build_versions = build_versions
@@ -175,7 +175,8 @@ deps.navigation = navigation
 deps.okhttp_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${versions.okhttp_logging_interceptor}"
 def paging = [:]
 paging.runtime = "androidx.paging:paging-runtime:$versions.paging"
-paging.rxjava2 = "androidx.paging:paging-runtime:$versions.paging"
+paging.rxjava2 = "androidx.paging:paging-rxjava2:$versions.paging"
+paging.guava = "androidx.paging:paging-guava:$versions.paging"
 deps.paging  = paging
 
 

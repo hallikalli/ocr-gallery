@@ -1,7 +1,9 @@
 package com.hklee.ocrgallery.data
 
+import androidx.paging.DataSource
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.liveData
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,8 +15,7 @@ class OcrPhotoRepository @Inject constructor(
     fun search(word: String) = Pager(
         PagingConfig(
             pageSize = 60,
-            enablePlaceholders = true,
-            maxSize = 200
+            enablePlaceholders = true
         )
     ) {
         dao.search(word)

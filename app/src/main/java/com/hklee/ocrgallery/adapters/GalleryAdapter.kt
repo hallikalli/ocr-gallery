@@ -5,11 +5,14 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.hklee.ocrgallery.base.ListItemClickListener
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.databinding.ListItemPhotoBinding
+import kotlinx.android.synthetic.main.list_item_photo.view.*
+import timber.log.Timber
 
 
-class GalleryAdapter(private val itemClickListener: ListItemClickListener?) :
+open class GalleryAdapter(private val itemClickListener: ListItemClickListener?) :
     PagingDataAdapter<OcrPhoto, GalleryAdapter.GalleryViewHolder>(GalleryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
@@ -24,8 +27,8 @@ class GalleryAdapter(private val itemClickListener: ListItemClickListener?) :
         var photo = getItem(position)
         photo?.let {
             holder.bind(it)
-            holder.itemView.setOnClickListener {
-                itemClickListener?.onListItemClick(position)
+            holder.itemView.imageView_photo.setOnClickListener {
+                itemClickListener?.onListItemClick(position, it)
             }
         }
     }

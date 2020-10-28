@@ -13,12 +13,7 @@
         <action
             android:id="@+id/to_PhotoSliderFragment"
             app:destination="@id/photoSliderFragment"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit">
-            <argument
-                android:name="selectedPosition"
-                app:argType="integer"
-                android:defaultValue="0" />
+            >
         </action>
     </fragment>
     <fragment

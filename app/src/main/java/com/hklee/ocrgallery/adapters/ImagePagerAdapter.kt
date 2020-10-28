@@ -1,6 +1,7 @@
 package com.hklee.ocrgallery.adapters
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,21 +12,25 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.hklee.ocrgallery.R
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.databinding.ListItemFullImageBinding
+import timber.log.Timber
 
 
-class ImagePagerAdapter :
+open class ImagePagerAdapter(private val onImageReadyListener: OnImageReadyListener)  :
     PagingDataAdapter<OcrPhoto, ImagePagerAdapter.ImagePagerViewHolder>(ImagePagerDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagePagerViewHolder {
-        return ImagePagerViewHolder(
-            ListItemFullImageBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
+        val binding = ListItemFullImageBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
         )
+        return ImagePagerViewHolder(binding, onImageReadyListener)
     }
 
     override fun onBindViewHolder(holder: ImagePagerViewHolder, position: Int) {
@@ -36,14 +41,43 @@ class ImagePagerAdapter :
     }
 
     class ImagePagerViewHolder(
-        private val binding: ListItemFullImageBinding
+        private val binding: ListItemFullImageBinding,
+        private val onImageReadyListener: OnImageReadyListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: OcrPhoto) {
+            binding.position = bindingAdapterPosition
             binding.photo = item
+            binding.requestListener = object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    Timber.d("onLoadFailed")
+                    onImageReadyListener.onImageReady(bindingAdapterPosition)
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    Timber.d("onResourceReady")
+                    onImageReadyListener.onImageReady(bindingAdapterPosition)
+                    return false
+                }
+            }
             binding.executePendingBindings()
         }
     }
+    interface OnImageReadyListener {
 
+        fun onImageReady(position: Int)
+    }
 }
 
 

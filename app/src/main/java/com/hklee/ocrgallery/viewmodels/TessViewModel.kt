@@ -7,8 +7,20 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+
+
+import androidx.paging.Pager
+
+import androidx.paging.PagingConfig
+
 import androidx.paging.PagingData
+
+import androidx.paging.*
+
+
 import com.hklee.musicplayer.base.BaseViewModel
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.data.OcrPhotoRepository
@@ -39,12 +51,10 @@ class TessViewModel @ViewModelInject constructor(
         "UPPER(${MediaStore.Images.Media.DISPLAY_NAME}) LIKE UPPER('%Screenshot%')"
     private val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} DESC"
 
-
     fun searchPhoto(word: String): Flow<PagingData<OcrPhoto>> {
-        searchFlow = photoRepository.search(word)
+        searchFlow = photoRepository.search(word).cachedIn(viewModelScope)
         return photoRepository.search(word)
     }
-
 
     fun sync(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
