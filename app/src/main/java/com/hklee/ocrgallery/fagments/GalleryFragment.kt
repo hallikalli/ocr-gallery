@@ -1,6 +1,5 @@
 package com.hklee.ocrgallery.fagments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,10 @@ import androidx.core.app.SharedElementCallback
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.hklee.musicplayer.base.BaseFragment
@@ -39,8 +38,9 @@ class GalleryFragment :
     override val mainViewModel by activityViewModels<TessViewModel>()
     private val adapter = GalleryAdapter(itemClickListener = this)
     private var job: Job? = null
-    private val compositeDisposable = CompositeDisposable()
+    private val uiCompositeDisposable = CompositeDisposable()
     private val SEARCH_REFRESH_MILLSEC = 300L
+    var oldSearchWord: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,27 +81,31 @@ class GalleryFragment :
     override fun onImageReady(position: Int) {
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Timber.d("ON DESTROY")
-        compositeDisposable.clear()
-    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Timber.d("ON DESTROY View")
+        uiCompositeDisposable.clear()
+    }
 
     private fun observeSearch() {
         var disposable = binding.searchView.queryTextChanges()
             .debounce(SEARCH_REFRESH_MILLSEC, TimeUnit.MILLISECONDS)
             .map(CharSequence::toString)
+            .filter { it != oldSearchWord }
             .onErrorReturn { "" }
             .subscribe {
+                Timber.d("observeSearch()")
                 search(it)
+                oldSearchWord = it
             }
-        compositeDisposable.add(disposable)
+        uiCompositeDisposable.add(disposable)
     }
 
     private fun search(word: String) {
         job?.cancel()
         job = lifecycleScope.launch {
+            adapter.submitData(PagingData.empty())
             mainViewModel.searchPhoto(word).collectLatest {
                 adapter.submitData(it)
             }
@@ -137,27 +141,25 @@ class GalleryFragment :
 
     // TODO : 슬라이드 애니메이션 문제 해결
     private fun scrollToPosition() {
-        mainViewModel.currentPosition.observe(viewLifecycleOwner, {
-            val layoutManager: RecyclerView.LayoutManager =
-                binding.recycler.layoutManager!!
-            val viewAtPosition = mainViewModel.currentPosition.value?.let {
-                layoutManager.findViewByPosition(
-                    it
-                )
-            }
-            // Scroll to position if the view for the current position is null (not currently part of
-            // layout manager children), or it's not completely visible.
-            if (viewAtPosition == null || layoutManager
-                    .isViewPartiallyVisible(viewAtPosition, false, true)
-            ) {
-                binding.recycler.post(Runnable {
-                    mainViewModel.currentPosition.value?.let {
-                        layoutManager.scrollToPosition(
-                            it
-                        )
-                    }
-                })
-            }
-        })
+        val layoutManager: RecyclerView.LayoutManager =
+            binding.recycler.layoutManager!!
+        val viewAtPosition = mainViewModel.currentPosition.value?.let {
+            layoutManager.findViewByPosition(
+                it
+            )
+        }
+        // Scroll to position if the view for the current position is null (not currently part of
+        // layout manager children), or it's not completely visible.
+        if (viewAtPosition == null || layoutManager
+                .isViewPartiallyVisible(viewAtPosition, false, true)
+        ) {
+            binding.recycler.post(Runnable {
+                mainViewModel.currentPosition.value?.let {
+                    layoutManager.scrollToPosition(
+                        it
+                    )
+                }
+            })
+        }
     }
 }
