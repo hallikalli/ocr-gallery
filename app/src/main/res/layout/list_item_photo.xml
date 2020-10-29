@@ -24,7 +24,7 @@
         android:padding="0.5dp">
 
         <ImageView
-            android:id="@+id/imageView_photo"
+            android:id="@+id/thumnailImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:adjustViewBounds="true"

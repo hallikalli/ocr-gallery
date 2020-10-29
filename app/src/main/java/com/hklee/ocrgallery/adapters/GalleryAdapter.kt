@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -16,10 +17,9 @@ import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.databinding.ListItemPhotoBinding
 import kotlinx.android.synthetic.main.list_item_photo.view.*
 
-
 open class GalleryAdapter(
     private val itemClickListener: ListItemClickListener?,
-    private val onImageReadyListener: OnImageReadyListener?=null
+    private val onImageReadyListener: OnImageReadyListener? = null
 ) :
     PagingDataAdapter<OcrPhoto, GalleryAdapter.GalleryViewHolder>(GalleryDiffCallback()) {
 
@@ -30,11 +30,16 @@ open class GalleryAdapter(
         return GalleryViewHolder(binding, onImageReadyListener)
     }
 
+    override fun onViewRecycled(holder: GalleryViewHolder) {
+        super.onViewRecycled(holder)
+        Glide.with(holder.itemView).clear(holder.itemView.thumnailImage);
+    }
+
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
         var photo = getItem(position)
         photo?.let {
             holder.bind(it)
-            holder.itemView.imageView_photo.setOnClickListener {
+            holder.itemView.thumnailImage.setOnClickListener {
                 itemClickListener?.onListItemClick(position, it)
             }
         }
@@ -42,7 +47,7 @@ open class GalleryAdapter(
 
     class GalleryViewHolder(
         private val binding: ListItemPhotoBinding,
-        private val onImageReadyListener:OnImageReadyListener?
+        private val onImageReadyListener: OnImageReadyListener?
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: OcrPhoto) {
             binding.photo = item

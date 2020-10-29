@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -13,6 +14,8 @@ import com.bumptech.glide.request.target.Target
 import com.hklee.ocrgallery.base.OnImageReadyListener
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.databinding.ListItemFullImageBinding
+import kotlinx.android.synthetic.main.list_item_full_image.view.*
+import kotlinx.android.synthetic.main.list_item_photo.view.*
 
 
 open class ImagePagerAdapter(private val onImageReadyListener: OnImageReadyListener)  :
@@ -23,6 +26,12 @@ open class ImagePagerAdapter(private val onImageReadyListener: OnImageReadyListe
             LayoutInflater.from(parent.context), parent, false
         )
         return ImagePagerViewHolder(binding, onImageReadyListener)
+    }
+
+    override fun onViewRecycled(holder: ImagePagerViewHolder) {
+        super.onViewRecycled(holder)
+        Glide.with(holder.itemView).clear(holder.itemView.fullImage);
+
     }
 
     override fun onBindViewHolder(holder: ImagePagerViewHolder, position: Int) {

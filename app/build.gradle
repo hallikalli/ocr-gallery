@@ -104,7 +104,7 @@ dependencies {
 
     //glide
     implementation deps.glide.runtime
-
+    implementation deps.glide.compiler
 //    implementation deps.transition
 
     //Timber

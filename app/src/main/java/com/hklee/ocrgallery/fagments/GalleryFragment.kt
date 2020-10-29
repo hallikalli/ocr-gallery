@@ -1,19 +1,14 @@
 package com.hklee.ocrgallery.fagments
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.app.SharedElementCallback
 import androidx.core.view.doOnPreDraw
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
-import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.hklee.musicplayer.base.BaseFragment
 import com.hklee.ocrgallery.R
@@ -41,36 +36,26 @@ class GalleryFragment :
     private val uiCompositeDisposable = CompositeDisposable()
     private val SEARCH_REFRESH_MILLSEC = 300L
     var oldSearchWord: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Timber.d("ON CREATE")
-        sharedElementEnterTransition =
-            TransitionInflater.from(context)
-                .inflateTransition(R.transition.shared_element_transition)
-
-    }
-
+/*
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         Timber.d("ON CREATE VIEW")
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        return binding.root
+    }*/
+
+    override fun init() {
         binding.recycler.adapter = adapter
         prepareTransitions()
         postponeEnterTransition()
         binding.recycler.doOnPreDraw {
+            scrollToPosition()
             startPostponedEnterTransition()
         }
-        return binding.root
-    }
-
-    override fun init() {
         observeSearch()
-        scrollToPosition()
     }
-
 
     override fun onListItemClick(position: Int, viewItem: View) {
         val action = GalleryFragmentDirections.toPhotoSliderFragment(position)
@@ -95,7 +80,6 @@ class GalleryFragment :
             .filter { it != oldSearchWord }
             .onErrorReturn { "" }
             .subscribe {
-                Timber.d("observeSearch()")
                 search(it)
                 oldSearchWord = it
             }
@@ -125,7 +109,7 @@ class GalleryFragment :
                 val selectedViewHolder = binding.recycler
                     .findViewHolderForAdapterPosition(position)
                     ?: return
-                selectedViewHolder?.itemView?.findViewById<ImageView>(R.id.imageView_photo)?.let {
+                selectedViewHolder.itemView.findViewById<ImageView>(R.id.thumnailImage)?.let {
                     sharedElements[names[0]] = it
                 }
             }
@@ -133,33 +117,14 @@ class GalleryFragment :
     }
 
 
-    /**
-     * copy from  https://github.com/android/animation-samples/tree/main/GridToPager
-     * Scrolls the recycler view to show the last viewed item in the grid. This is important when
-     * navigating back from the grid.
-     */
-
-    // TODO : 슬라이드 애니메이션 문제 해결
     private fun scrollToPosition() {
-        val layoutManager: RecyclerView.LayoutManager =
-            binding.recycler.layoutManager!!
-        val viewAtPosition = mainViewModel.currentPosition.value?.let {
-            layoutManager.findViewByPosition(
-                it
-            )
+        //화면상에 Item이 보이지 않으면 스크롤
+        mainViewModel.currentPosition.value?.let {
+            binding.recycler.layoutManager?.let { manager ->
+                if (manager.findViewByPosition(it) == null)
+                    manager.scrollToPosition(it)
+            }
         }
-        // Scroll to position if the view for the current position is null (not currently part of
-        // layout manager children), or it's not completely visible.
-        if (viewAtPosition == null || layoutManager
-                .isViewPartiallyVisible(viewAtPosition, false, true)
-        ) {
-            binding.recycler.post(Runnable {
-                mainViewModel.currentPosition.value?.let {
-                    layoutManager.scrollToPosition(
-                        it
-                    )
-                }
-            })
-        }
+
     }
 }
