@@ -31,7 +31,6 @@ class ImagePagerFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("ON CREATE")
         sharedElementEnterTransition =
             TransitionInflater.from(context)
                 .inflateTransition(R.transition.shared_element_transition)

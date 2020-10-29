@@ -36,15 +36,6 @@ class GalleryFragment :
     private val uiCompositeDisposable = CompositeDisposable()
     private val SEARCH_REFRESH_MILLSEC = 300L
     var oldSearchWord: String? = null
-/*
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Timber.d("ON CREATE VIEW")
-        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        return binding.root
-    }*/
 
     override fun init() {
         binding.recycler.adapter = adapter
@@ -69,7 +60,6 @@ class GalleryFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Timber.d("ON DESTROY View")
         uiCompositeDisposable.clear()
     }
 
