@@ -4,25 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="position"
             type="int" />
-
         <variable
             name="photo"
             type="com.hklee.ocrgallery.data.OcrPhoto" />
-
         <variable
             name="requestListener"
             type="com.bumptech.glide.request.RequestListener&lt;android.graphics.drawable.Drawable>" />
-
     </data>
 
     <FrameLayout
         android:id="@+id/imageContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:background="@color/black"
         android:tag="@{position}">
 
         <com.github.chrisbanes.photoview.PhotoView
@@ -30,7 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
             android:transitionName="@{photo.uri}"
             app:imageFromUri="@{photo.uri}"
             app:requestListener="@{requestListener}"
