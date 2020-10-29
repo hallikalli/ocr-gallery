@@ -39,8 +39,10 @@ class TessViewModel @ViewModelInject constructor(
 ) : BaseViewModel() {
 
     var searchFlow: Flow<PagingData<OcrPhoto>>? = null
-    private val _syncProgress = MutableLiveData<Pair<Int, Int>>()
-    val syncProgress: LiveData<Pair<Int, Int>> get() = _syncProgress
+    private val _loading = MutableLiveData<Boolean>().apply {
+        value = false
+    }
+    val loading: LiveData<Boolean> get() = _loading
     val currentPosition = MutableLiveData<Int>()
     private val projection = arrayOf(
         MediaStore.Images.Media._ID,
@@ -58,6 +60,7 @@ class TessViewModel @ViewModelInject constructor(
 
     fun sync(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
+            _loading.postValue(true)
             var list = loadScreenShots(context)
             //스크린샷 추가
             for (uri in list) {
@@ -76,6 +79,7 @@ class TessViewModel @ViewModelInject constructor(
                     photoRepository.remove(ocrPhoto)
                 }
             }
+            _loading.postValue(false)
         }
     }
 

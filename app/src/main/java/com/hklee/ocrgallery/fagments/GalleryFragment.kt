@@ -39,6 +39,7 @@ class GalleryFragment :
 
     override fun init() {
         binding.recycler.adapter = adapter
+        binding.vm=mainViewModel
         prepareTransitions()
         postponeEnterTransition()
         binding.recycler.doOnPreDraw {
@@ -46,6 +47,7 @@ class GalleryFragment :
             startPostponedEnterTransition()
         }
         observeSearch()
+//        observeLoading()
     }
 
     override fun onListItemClick(position: Int, viewItem: View) {
@@ -84,6 +86,11 @@ class GalleryFragment :
                 adapter.submitData(it)
             }
         }
+    }
+    private fun observeLoading() {
+        mainViewModel.loading.observe(viewLifecycleOwner, {
+            binding.progressbar.isIndeterminate = it
+        })
     }
 
     private fun prepareTransitions() {
