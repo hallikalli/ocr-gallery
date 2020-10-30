@@ -5,12 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="photo"
             type="com.hklee.ocrgallery.data.OcrPhoto" />
+
         <variable
             name="position"
             type="int" />
+
         <variable
             name="requestListener"
             type="com.bumptech.glide.request.RequestListener&lt;android.graphics.drawable.Drawable>" />
@@ -32,7 +35,6 @@
             android:transitionName="@{photo.uri}"
             app:imageFromUri="@{photo.uri}"
             app:layout_constraintBottom_toBottomOf="parent"
-
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

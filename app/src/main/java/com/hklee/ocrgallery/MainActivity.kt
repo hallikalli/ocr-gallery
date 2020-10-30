@@ -33,10 +33,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        askPermissionAndSync()
+        checkPermissionAndSyncDb()
     }
 
-    private fun askPermissionAndSync() {
+    private fun checkPermissionAndSyncDb() {
         permissionsRequester.launch()
     }
 
