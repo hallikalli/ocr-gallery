@@ -118,10 +118,12 @@ dependencies {
 
     implementation deps.lifecycle.viewmodel_ktx
 
+    // Drag dismiss
     implementation 'com.github.Commit451:ElasticDragDismissLayout:1.0.4'
 
+    // Permission Request
+    implementation "org.permissionsdispatcher:permissionsdispatcher-ktx:1.0.1"
 
-//    testImplementation deps.mockito.core
     testImplementation deps.mockito.inline
     testImplementation 'junit:junit:4.13.1'
 

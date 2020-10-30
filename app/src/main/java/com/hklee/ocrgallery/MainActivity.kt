@@ -1,22 +1,25 @@
 package com.hklee.ocrgallery
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
-import com.googlecode.tesseract.android.TessBaseAPI
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.hklee.ocrgallery.viewmodels.TessViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
-import java.io.File
+import permissions.dispatcher.*
+import permissions.dispatcher.ktx.PermissionsRequester
+import permissions.dispatcher.ktx.constructPermissionsRequest
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val tessViewModel by viewModels<TessViewModel>()
+    private val permissionsRequester: PermissionsRequester = constructPermissionsRequest(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_MEDIA_LOCATION,
+    ) {
+        tessViewModel.sync(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        tessViewModel.sync(this)
+        askPermissionAndSync()
     }
+
+    private fun askPermissionAndSync() {
+        permissionsRequester.launch()
+    }
+
 }
