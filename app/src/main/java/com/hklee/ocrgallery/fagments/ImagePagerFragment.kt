@@ -7,10 +7,13 @@ import android.widget.ImageView
 import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.transition.TransitionInflater
 import androidx.viewpager2.widget.ViewPager2
+import com.commit451.elasticdragdismisslayout.ElasticDragDismissFrameLayout
+import com.commit451.elasticdragdismisslayout.ElasticDragDismissListener
 import com.hklee.musicplayer.base.BaseFragment
 import com.hklee.ocrgallery.R
 import com.hklee.ocrgallery.adapters.ImagePagerAdapter
@@ -24,7 +27,7 @@ import timber.log.Timber
 
 class ImagePagerFragment :
     BaseFragment<FragmentPagerBinding, TessViewModel>(R.layout.fragment_pager),
-    OnImageReadyListener {
+    OnImageReadyListener, ElasticDragDismissListener {
     private val args: ImagePagerFragmentArgs by navArgs()
     override val mainViewModel by activityViewModels<TessViewModel>()
     private var adapter = ImagePagerAdapter(this)
@@ -44,6 +47,7 @@ class ImagePagerFragment :
         observePagePosition()
         initPagerPosition()
         initAdapterData()
+        binding.draggableFrame.addListener(this)
     }
 
     private fun prepareTransitions() {
@@ -95,6 +99,19 @@ class ImagePagerFragment :
         if (position == args.selectedPosition) {
             startPostponedEnterTransition()
         }
+    }
+
+    override fun onDrag(
+        elasticOffset: Float,
+        elasticOffsetPixels: Float,
+        rawOffset: Float,
+        rawOffsetPixels: Float
+    ) {
+        Timber.d("온 드래그 ")
+    }
+
+    override fun onDragDismissed() {
+        findNavController().navigateUp()
     }
 
 }

@@ -118,6 +118,8 @@ dependencies {
 
     implementation deps.lifecycle.viewmodel_ktx
 
+    implementation 'com.github.Commit451:ElasticDragDismissLayout:1.0.4'
+
 
 //    testImplementation deps.mockito.core
     testImplementation deps.mockito.inline
