@@ -1,15 +1,20 @@
 package com.hklee.ocrgallery
 
 import android.Manifest
+import android.content.Context
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.hklee.ocrgallery.viewmodels.TessViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import permissions.dispatcher.*
 import permissions.dispatcher.ktx.PermissionsRequester
 import permissions.dispatcher.ktx.constructPermissionsRequest
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -35,4 +40,22 @@ class MainActivity : AppCompatActivity() {
         permissionsRequester.launch()
     }
 
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        val v: View? = currentFocus
+        val ret = super.dispatchTouchEvent(event)
+        if (v is EditText || v is SearchView) {
+            val w: View? = currentFocus
+            val scrcoords = IntArray(2)
+            w?.let {
+                w.getLocationOnScreen(scrcoords)
+                val x: Float = event.rawX + w.left - scrcoords[0]
+                val y: Float = event.rawY + w.top - scrcoords[1]
+                if (event.action == MotionEvent.ACTION_UP && (x < w.left || x >= w.right || y < w.top || y > w.bottom)) {
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(window.currentFocus!!.windowToken, 0)
+                }
+            }
+        }
+        return ret
+    }
 }
