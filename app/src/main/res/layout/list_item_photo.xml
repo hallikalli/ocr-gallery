@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="photo"
             type="com.hklee.ocrgallery.data.OcrPhoto" />
@@ -41,6 +43,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:requestListener="@{requestListener}"
             tools:srcCompat="@tools:sample/avatars" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#AA000000"
+            android:visibility="@{photo.text.equals(``)? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/thumnailImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/thumnailImage"
+            app:layout_constraintTop_toTopOf="@+id/thumnailImage" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
