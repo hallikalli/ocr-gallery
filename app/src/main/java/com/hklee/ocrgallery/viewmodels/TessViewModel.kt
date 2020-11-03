@@ -70,6 +70,11 @@ class TessViewModel @ViewModelInject constructor(
             for (uri in list) {
                 if (photoRepository.isUriExist(uri))
                     continue
+                var ocrPhoto = OcrPhoto(uri, "")
+                photoRepository.insert(ocrPhoto)
+            }
+            //OCR 추가
+            for (ocrPhoto in  photoRepository.loadOldVersion(BuildConfig.VERSION_CODE)) {
                 val text = convertBitmap(
                     context.contentResolver,
                     Uri.parse(ocrPhoto.uri)

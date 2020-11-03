@@ -1,23 +1,23 @@
 package com.hklee.ocrgallery.data
 
-import androidx.paging.DataSource
-import androidx.paging.Pager
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
+
 
 @Dao
-interface OcrPhotoDao{
+interface OcrPhotoDao {
     @Query("SELECT * FROM OcrPhoto")
     fun loadAll(): Array<OcrPhoto>
 
     @Query("SELECT * FROM OcrPhoto WHERE ocr LIKE '%'||:word||'%'")
-    fun search(word:String): PagingSource<Int, OcrPhoto>
+    fun search(word: String): PagingSource<Int, OcrPhoto>
+
+    @RawQuery(observedEntities = [OcrPhoto::class])
+    fun search(query: SupportSQLiteQuery): PagingSource<Int, OcrPhoto>
 
     @Query("SELECT EXISTS(SELECT * FROM OcrPhoto WHERE uri = :uri)")
-    fun isUriExist(uri : String) : Boolean
+    fun isUriExist(uri: String): Boolean
 
     @Insert
     suspend fun insert(ocrPhoto: List<OcrPhoto>)
@@ -27,4 +27,10 @@ interface OcrPhotoDao{
 
     @Delete
     suspend fun delete(ocrPhoto: OcrPhoto)
+
+    @Update
+    suspend fun update(ocrPhoto: OcrPhoto)
+
+    @Query("SELECT * FROM OcrPhoto WHERE version < :version")
+    fun getOldVersion(version: Int): Array<OcrPhoto>
 }
