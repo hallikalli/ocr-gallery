@@ -22,10 +22,8 @@ import com.hklee.ocrgallery.BuildConfig
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.data.OcrPhotoRepository
 import com.hklee.ocrgallery.utils.TesseractOcr
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.sql.Date
 
@@ -41,6 +39,8 @@ class TessViewModel @ViewModelInject constructor(
     }
     val loading: LiveData<Boolean> get() = _loading
     val currentPosition = MutableLiveData<Int>()
+    var syncJob: Job? = null
+
     private val projection = arrayOf(
         MediaStore.Images.Media._ID,
         MediaStore.Images.Media.DISPLAY_NAME,
@@ -57,13 +57,15 @@ class TessViewModel @ViewModelInject constructor(
     }
 
     fun sync(context: Context) {
-        CoroutineScope(Dispatchers.IO).launch {
+        if (syncJob != null && !syncJob!!.isCompleted) return
+        syncJob = CoroutineScope(Dispatchers.IO).launch {
             _loading.postValue(true)
             var list = loadScreenShots(context)
             //스크린샷 삭제
             for (ocrPhoto in photoRepository.loadAll()) {
                 if (!list.contains(ocrPhoto.uri)) {
                     photoRepository.remove(ocrPhoto)
+
                 }
             }
             //스크린샷 추가
@@ -74,14 +76,13 @@ class TessViewModel @ViewModelInject constructor(
                 photoRepository.insert(ocrPhoto)
             }
             //OCR 추가
-            for (ocrPhoto in  photoRepository.loadOldVersion(BuildConfig.VERSION_CODE)) {
+            for (ocrPhoto in photoRepository.loadOldVersion(BuildConfig.VERSION_CODE)) {
                 val text = convertBitmap(
                     context.contentResolver,
                     Uri.parse(ocrPhoto.uri)
                 )?.let { tesseract.toOcrText(it) }
                 ocrPhoto.text = text ?: ""
-                ocrPhoto.version= BuildConfig.VERSION_CODE
-                println(ocrPhoto.text)
+                ocrPhoto.version = BuildConfig.VERSION_CODE
                 photoRepository.update(ocrPhoto)
             }
             _loading.postValue(false)
