@@ -12,16 +12,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 
 
-import androidx.paging.Pager
-
-import androidx.paging.PagingConfig
-
 import androidx.paging.PagingData
 
 import androidx.paging.*
 
 
 import com.hklee.musicplayer.base.BaseViewModel
+import com.hklee.ocrgallery.BuildConfig
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.data.OcrPhotoRepository
 import com.hklee.ocrgallery.utils.TesseractOcr
@@ -49,8 +46,9 @@ class TessViewModel @ViewModelInject constructor(
         MediaStore.Images.Media.DISPLAY_NAME,
         MediaStore.Images.Media.DATE_TAKEN,
     )
-    private val selection =
-        "UPPER(${MediaStore.Images.Media.DISPLAY_NAME}) LIKE UPPER('%Screenshot%')"
+    private val selection = arrayOf("Screenshot", "Capture").joinToString(separator = "OR ") {
+        "UPPER(${MediaStore.Images.Media.DISPLAY_NAME}) LIKE UPPER('%$it%')"
+    }
     private val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} DESC"
 
     fun searchPhoto(word: String): Flow<PagingData<OcrPhoto>> {
@@ -62,22 +60,24 @@ class TessViewModel @ViewModelInject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             _loading.postValue(true)
             var list = loadScreenShots(context)
-            //스크린샷 추가
-            for (uri in list) {
-                if (photoRepository.isUriExist(uri.toString()))
-                    continue
-                val text = convertBitmap(
-                    context.contentResolver,
-                    Uri.parse(uri)
-                )?.let { tesseract.toOcrText(it) }
-                var ocrPhoto = OcrPhoto(uri, text ?: "")
-                photoRepository.insert(ocrPhoto)
-            }
             //스크린샷 삭제
             for (ocrPhoto in photoRepository.loadAll()) {
                 if (!list.contains(ocrPhoto.uri)) {
                     photoRepository.remove(ocrPhoto)
                 }
+            }
+            //스크린샷 추가
+            for (uri in list) {
+                if (photoRepository.isUriExist(uri))
+                    continue
+                val text = convertBitmap(
+                    context.contentResolver,
+                    Uri.parse(ocrPhoto.uri)
+                )?.let { tesseract.toOcrText(it) }
+                ocrPhoto.text = text ?: ""
+                ocrPhoto.version= BuildConfig.VERSION_CODE
+                println(ocrPhoto.text)
+                photoRepository.update(ocrPhoto)
             }
             _loading.postValue(false)
         }
