@@ -1,7 +1,11 @@
 package com.hklee.ocrgallery.fagments
 
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.SharedElementCallback
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
@@ -22,7 +26,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
@@ -39,7 +42,9 @@ class GalleryFragment :
 
     override fun init() {
         binding.recycler.adapter = adapter
-        binding.vm=mainViewModel
+        binding.vm = mainViewModel
+        (activity as AppCompatActivity)?.setSupportActionBar(binding.toolbar)
+        (activity as AppCompatActivity)?.supportActionBar?.title=""
         prepareTransitions()
         postponeEnterTransition()
         binding.recycler.doOnPreDraw {
@@ -47,7 +52,19 @@ class GalleryFragment :
             startPostponedEnterTransition()
         }
         observeSearch()
-//        observeLoading()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_gallery, menu);
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item?.itemId) {
+            R.id.action_setting ->
+                findNavController().navigate(GalleryFragmentDirections.toSettingsFragment())
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onListItemClick(position: Int, viewItem: View) {
@@ -87,6 +104,7 @@ class GalleryFragment :
             }
         }
     }
+
     private fun observeLoading() {
         mainViewModel.loading.observe(viewLifecycleOwner, {
             binding.progressbar.isIndeterminate = it

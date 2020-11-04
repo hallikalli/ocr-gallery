@@ -1,11 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.OcrGallery" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/black_rock</item>
         <item name="colorPrimaryVariant">@color/black_rock</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
+        <item name="colorAccent">@color/white</item>
+        <item name="colorControlHighlight">@color/black_rock</item>
+        <item name="android:statusBarColor">@color/black_rock_dark1</item>
         <item name="colorSecondary">@color/black_rock</item>
         <item name="colorSecondaryVariant">@color/black_rock</item>
         <item name="colorOnSecondary">@color/black</item>
@@ -14,4 +15,5 @@
     <style name="SplashTheme" parent="Theme.OcrGallery">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
+
 </resources>
