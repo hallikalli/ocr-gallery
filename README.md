@@ -1,8 +1,30 @@
-### 👩🏻‍💻 소개
-맛집 정보, 책 정보 등등... 캡쳐는 많이 해놨지만 막상 필요할땐 찾기가 번거롭고...
-텍스트 검색으로 내가 캡처한 이미지를 찾을 수 없을까? 🤔
-그래서 만들었습니다. 😊
 
-### 👩‍🔧 추가 예정
-- 이미지 공유 기능
-- 이미지 즐겨찾기 기능
+### 소개
+캡쳐한 텍스트 이미지를 텍스트 검색으로 찾는 앱 입니다.\
+해당 프로젝트는 공개용 입니다.\
+(추후 비공개 레포지토리에서 개발 진행, 플레이스토어 출시 예정)\
+<img src="https://github.com/hallikalli/ocr-gallery/blob/master/screenshots/preview.gif" width="300" height="532">
+
+
+
+### Stack
+AAC
+- ViewModel
+- LiveData
+- Navigation Component
+- Paging
+- Room
+
+DI
+- Dagger Hilt
+
+ETC
+- Kotlin Coroutine
+- RxJava
+- Glide
+- Timber
+- Tess Two
+- ElasticDragDismissLayout
+- Permissionsdispatcher
+- PhotoView
+- oss-licenses-plugin
