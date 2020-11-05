@@ -66,6 +66,7 @@ dependencies {
     //paging
     implementation "androidx.paging:paging-runtime-ktx:3.0.0-alpha05"
 
+    //navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.1"
     implementation "androidx.navigation:navigation-ui-ktx:2.3.1"
 
@@ -97,10 +98,8 @@ dependencies {
     //Tess two (ocr)
     implementation deps.tess_two
 
+    //PhotoView
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
-
-    implementation deps.lifecycle.viewmodel_ktx
 
     // Drag dismiss
     implementation 'com.github.Commit451:ElasticDragDismissLayout:1.0.4'
