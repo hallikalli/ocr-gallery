@@ -98,14 +98,5 @@
             app:spanCount="@integer/grid_columns"
             tools:listitem="@layout/list_item_photo" />
 
-        <SearchView
-            android:id="@+id/searchView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></SearchView>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

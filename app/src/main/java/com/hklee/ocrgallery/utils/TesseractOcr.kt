@@ -28,10 +28,14 @@ class TesseractOcr(val context: Context) {
 
     // 문자 인식 및 결과 출력
     fun toOcrText(bitmap: Bitmap): String {
-        tess.setImage(bitmap)
-        var result = tess.utF8Text.replace("\n", " ").replace("\t", " ");
-        Timber.tag("result ocr ").d(result)
-        return result
+        return try {
+            tess.setImage(bitmap)
+            var result = tess.utF8Text.replace("\n", " ").replace("\t", " ");
+            result
+        } catch (e: Exception) {
+            Timber.tag("result ocr error").e(e.toString())
+            ""
+        }
     }
 
     fun destroy() {

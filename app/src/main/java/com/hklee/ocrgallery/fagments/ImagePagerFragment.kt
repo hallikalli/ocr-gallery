@@ -107,7 +107,6 @@ class ImagePagerFragment :
         rawOffset: Float,
         rawOffsetPixels: Float
     ) {
-        Timber.d("온 드래그 ")
     }
 
     override fun onDragDismissed() {
