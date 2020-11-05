@@ -1,29 +1,28 @@
 package com.hklee.ocrgallery.viewmodels
 
-import android.content.ContentResolver
+
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-
-
 import androidx.paging.PagingData
-
-import androidx.paging.*
-
-
+import androidx.paging.cachedIn
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
 import com.hklee.musicplayer.base.BaseViewModel
 import com.hklee.ocrgallery.BuildConfig
 import com.hklee.ocrgallery.data.OcrPhoto
 import com.hklee.ocrgallery.data.OcrPhotoRepository
 import com.hklee.ocrgallery.utils.TesseractOcr
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.sql.Date
 
@@ -78,7 +77,7 @@ class TessViewModel @ViewModelInject constructor(
             //OCR 추가
             for (ocrPhoto in photoRepository.loadOldVersion(BuildConfig.VERSION_CODE)) {
                 val text = convertBitmap(
-                    context.contentResolver,
+                    context,
                     Uri.parse(ocrPhoto.uri)
                 )?.let { tesseract.toOcrText(it) }
                 ocrPhoto.text = text ?: ""
@@ -89,13 +88,15 @@ class TessViewModel @ViewModelInject constructor(
         }
     }
 
-    fun convertBitmap(contentResolver: ContentResolver, uri: Uri): Bitmap? {
+    fun convertBitmap(context: Context, uri: Uri): Bitmap? {
         var bitmap: Bitmap? = null
-        bitmap = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
-        } else {
-            MediaStore.Images.Media.getBitmap(contentResolver, uri)
-        }
+        bitmap = Glide
+            .with(context)
+            .asBitmap()
+            .load(uri)
+            .format(DecodeFormat.PREFER_ARGB_8888)
+            .submit()
+            .get()
         return bitmap
     }
 
