@@ -11,7 +11,7 @@ android {
     buildToolsVersion build_versions.build_tools
 
     defaultConfig {
-        applicationId "com.hklee.OcrGallery"
+        applicationId "com.hklee.findcapture"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
         versionCode 1
@@ -41,80 +41,63 @@ android {
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.10"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'com.google.android.material:material:1.3.0-alpha03'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation "androidx.appcompat:appcompat:1.3.0-alpha02"
+    implementation deps.material
+    implementation deps.core_ktx
+    implementation deps.constraint_layout
+    implementation deps.app_compat
     implementation deps.recyclerview
     implementation deps.cardview
     implementation deps.lifecycle.runtime
     implementation deps.kotlin.stdlib
 
-    //room
     implementation deps.room.runtime
     implementation deps.room.ktx
-    implementation 'androidx.preference:preference:1.1.1'
     kapt deps.room.compiler
 
-    //lifecycle
     implementation deps.lifecycle.runtime
     implementation deps.lifecycle.livedata_ktx
     implementation deps.lifecycle.viewmodel_ktx
 
-    //paging
-    implementation "androidx.paging:paging-runtime-ktx:3.0.0-alpha05"
+    implementation deps.navigation.fragment_ktx
+    implementation deps.navigation.ui_ktx
 
-    //navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.3.1"
-    implementation "androidx.navigation:navigation-ui-ktx:2.3.1"
-
-    //hilt
     implementation deps.hilt.android
     implementation deps.hilt.view_model
     kapt deps.hilt.compiler
     kapt deps.hilt.view_model_compiler
 
-    //viewmodel
-    implementation deps.lifecycle.viewmodel_ktx
-
-    //coroutines
     implementation deps.coroutines.android
     implementation deps.coroutines.core
 
-    //Reactive X
     implementation deps.rx_android
     implementation deps.rxjava3
     implementation deps.rx_binding
 
-    //glide
     implementation deps.glide.runtime
     implementation deps.glide.compiler
 
-    //Timber
-    implementation deps.timber
+    implementation deps.paging.runtime_ktx
 
-    //Tess two (ocr)
-    implementation deps.tess_two
+    implementation deps.prefernce_ktx
 
-    //PhotoView
-    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation deps.timber   //Timber Log
 
-    // Drag dismiss
-    implementation 'com.github.Commit451:ElasticDragDismissLayout:1.0.4'
+    implementation deps.tess_two  //OCR
 
-    // Permission Request
-    implementation "org.permissionsdispatcher:permissionsdispatcher-ktx:1.0.1"
+    implementation deps.photoview  //드래그 하여 확장
 
-    //opensource
-    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+    implementation deps.elastic_drag_dimiss_layout //드래그 하여 화면 종료
+
+    implementation deps.permissions_dispatcher_ktx //Permission Request
+
+    implementation deps.gms_oss_licenses
+    implementation deps.gms_ads
 
     testImplementation deps.mockito.inline
     testImplementation 'junit:junit:4.13.1'
-
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation deps.espresso.core
     androidTestImplementation deps.mockito.android
     androidTestImplementation deps.mockito.inline
 
