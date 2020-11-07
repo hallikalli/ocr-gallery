@@ -11,7 +11,7 @@ android {
     buildToolsVersion build_versions.build_tools
 
     defaultConfig {
-        applicationId "com.hklee.findcapture"
+        applicationId "com.hklee.OcrGallery"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
         versionCode 1
@@ -92,7 +92,6 @@ dependencies {
     implementation deps.permissions_dispatcher_ktx //Permission Request
 
     implementation deps.gms_oss_licenses
-    implementation deps.gms_ads
 
     testImplementation deps.mockito.inline
     testImplementation 'junit:junit:4.13.1'

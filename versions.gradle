@@ -47,7 +47,6 @@ versions.photoview = '2.0.0'
 versions.elastic_drag_dimiss_layout = '1.0.4'
 versions.permissions_dispatcher_ktx = '1.0.1'
 versions.gms_oss_licenses = '17.0.0'
-versions.gms_ads= '19.5.0'
 ext.versions = versions
 
 def build_versions = [:]
